@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">EmbedLab3_3</string>
+    <string name="buttonCalculate">Calculate</string>
+    <string name="output"></string>
+    <string name="a">0</string>
+    <string name="b">0</string>
+    <string name="c">0</string>
+    <string name="d">0</string>
+    <string name="y">0</string>
+    <string name="mutation">0</string>
+</resources>
