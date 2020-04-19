@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText c_value;
     private EditText d_value;
     private EditText y_value;
-    private EditText mut_value;
     private TextView out_res;
     private Button button_calc;
 
@@ -35,30 +34,30 @@ public class MainActivity extends AppCompatActivity {
         c_value = (EditText) findViewById(R.id.c_value);
         d_value = (EditText) findViewById(R.id.d_value);
         y_value = (EditText) findViewById(R.id.y_value);
-        mut_value = (EditText) findViewById(R.id.mut_value);
         out_res = (TextView) findViewById(R.id.out_res);
         button_calc = (Button) findViewById(R.id.button);
 
         button_calc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int [] result;
+                long start_time;
+                long end_time;
                 int a,b,c,d,y;
-                double mut;
+                int[] result = {Integer.MAX_VALUE,Integer.MAX_VALUE,Integer.MAX_VALUE,Integer.MAX_VALUE};
+                long best_time = Long.MAX_VALUE;
+                double best_mutation = 0;
 
                 String a_str = a_value.getText().toString();
                 String b_str = b_value.getText().toString();
                 String c_str = c_value.getText().toString();
                 String d_str = d_value.getText().toString();
                 String y_str = y_value.getText().toString();
-                String mut_str = mut_value.getText().toString();
 
                 a_value.setText("");
                 b_value.setText("");
                 c_value.setText("");
                 d_value.setText("");
                 y_value.setText("");
-                mut_value.setText("");
 
                 try {
                     a=Integer.parseInt(a_str);
@@ -66,13 +65,23 @@ public class MainActivity extends AppCompatActivity {
                     c=Integer.parseInt(c_str);
                     d=Integer.parseInt(d_str);
                     y=Integer.parseInt(y_str);
-                    mut=Double.parseDouble(mut_str);
                 } catch (NumberFormatException e) {
                     Toast.makeText(getApplicationContext(),"Incorrect input type!", Toast.LENGTH_LONG).show();
                     return;
                 }
-                result = Genetic(a, b, c, d, y, mut);
-                out_res.setText(a+"*"+result[0]+"+"+b+"*"+result[1]+"+"+c+"*"+result[2]+"+"+d+"*"+result[3]+"="+y);
+
+                for(double mut = 0; mut < 1; mut += 0.1 ){
+                    start_time = System.currentTimeMillis();
+                    int[] temp_result = Genetic(a, b, c, d, y, mut);
+                    end_time = System.currentTimeMillis();
+                    long duration  = end_time-start_time;
+                    if(duration < best_time){
+                        best_time = duration;
+                        best_mutation = mut;
+                        result = temp_result;
+                    }
+                }
+                out_res.setText(a+"*"+result[0]+"+"+b+"*"+result[1]+"+"+c+"*"+result[2]+"+"+d+"*"+result[3]+"="+y+"\n"+"Time:"+best_time*1000+", Mutation"+best_mutation);
             }
         });
     }
